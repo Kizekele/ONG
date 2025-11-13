@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Ajouter Élève</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    input:focus, select:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      grid-column: 1 / -1;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Ajouter un élève</h2>
+    <form id="studentForm" action="add_student.php" method="post" novalidate>
+      <input name="nom" placeholder="Nom" required>
+      <input name="postnom" placeholder="Postnom">
+      <input name="prenom" placeholder="Prénom" required>
+      <input name="avenue" placeholder="Avenue">
+
+      <label for="quartier">Quartier</label>
+      <select id="quartier" name="quartier" required>
+        <option value="">Quartier...</option>
+        <option>Salongo</option>
+        <option>Gombele</option>
+        <option>Madrendele</option>
+      </select>
+
+      <label for="commune">Commune</label>
+      <select id="commune" name="commune" required>
+        <option value="">Commune...</option>
+        <option>Lemba</option>
+        <option>Matete</option>
+        <option>Ngaba</option>
+      </select>
+
+      <input name="ecole" placeholder="École">
+
+      <label for="cycle">Cycle</label>
+      <select id="cycle" name="cycle" required>
+        <option value="">Cycle...</option>
+        <option value="Maternelle">Maternelle</option>
+        <option value="Primaire">Primaire</option>
+        <option value="Secondaire">Secondaire</option>
+        <option value="Humanité">Humanité</option>
+      </select>
+
+      <label for="classe">Classe</label>
+      <select id="classe" name="classe" required>
+        <option value="">Classe...</option>
+      </select>
+
+      <input name="age" type="number" min="3" max="30" placeholder="Âge">
+
+      <label for="sexe">Sexe</label>
+      <select id="sexe" name="sexe" required>
+        <option value="">Sexe</option>
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+
+      <label for="point_arret">Point d'arrêt</label>
+      <select id="point_arret" name="point_arret" required>
+        <option value="">Point d'arrêt...</option>
+        <option>Kamutsha</option>
+        <option>Kilidja</option>
+        <option>Garage</option>
+        <option>Igota Nzambi</option>
+        <option>Musudja</option>
+        <option>Station Salongo</option>
+        <option>Route ByPass</option>
+        <option>Route Biangana</option>
+      </select>
+
+      <input name="parent_nom" placeholder="Nom du parent" required>
+      <input id="parent_phone" name="parent_phone" placeholder="Téléphone parent (10 chiffres)" required>
+
+      <button type="submit">Enregistrer</button>
+    </form>
+  </div>
+
+  <script>
+    const classes = {
+      "Maternelle": ["4ans A","4ans B","4ans C","4ans D","4ans E","4ans F","4ans G",
+                     "5ans A","5ans B","5ans C","5ans D","5ans E","5ans F","5ans G"],
+      "Primaire": ["1 ère Primaire","2 ème Primaire","3 ème Primaire","4 ème","5 ème","6 ème"],
+      "Secondaire": ["7 ème","8 ème"],
+      "Humanité": ["1 ère Humanité","2 ème Humanité","3 ème Humanité","4 ème Humanité"]
+    };
+
+    document.getElementById('cycle').addEventListener('change', function(){
+      const cls = classes[this.value] || [];
+      const sel = document.getElementById('classe');
+      sel.innerHTML = '<option value="">Classe...</option>';
+      cls.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c;
+        o.textContent = c;
+        sel.appendChild(o);
+      });
+    });
+
+    // Validation du téléphone parent
+    document.getElementById('studentForm').addEventListener('submit', function(e){
+      const phone = document.getElementById('parent_phone').value.trim();
+      if(!/^\d{10}$/.test(phone)) {
+        e.preventDefault();
+        alert('Le numéro du parent doit contenir exactement 10 chiffres.');
+      }
+    });
+  </script>
+</body>
+</html>
