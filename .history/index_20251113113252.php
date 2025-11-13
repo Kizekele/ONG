@@ -7,7 +7,7 @@ $stmt = $pdo->query("
            a.montant, a.date_paiement, a.date_expiration, a.dette
     FROM eleves e
     LEFT JOIN abonnements a ON e.id = a.eleve_id
-    ORDER BY e.nom ASC, e.postnom ASC, e.prenom ASC
+    ORDER BY e.date_ajout DESC
 ");
 $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -73,27 +73,11 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         table th {
             background-color: #0E0D0DFF;
-            color: #fff;
             font-weight: 600;
         }
 
         table tr:hover {
             background-color: #f1f7ff;
-        }
-
-        .main-content {
-            padding: 20px;
-            margin-left: 250px; /* espace pour la sidebar */
-        }
-
-        header {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -139,7 +123,7 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="9">Aucun élève trouvé.</td></tr>
+                <tr><td colspan="8">Aucun élève trouvé.</td></tr>
             <?php endif; ?>
         </table>
     </div>

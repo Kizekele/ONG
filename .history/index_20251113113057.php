@@ -7,7 +7,7 @@ $stmt = $pdo->query("
            a.montant, a.date_paiement, a.date_expiration, a.dette
     FROM eleves e
     LEFT JOIN abonnements a ON e.id = a.eleve_id
-    ORDER BY e.nom ASC, e.postnom ASC, e.prenom ASC
+    ORDER BY e.date_ajout DESC
 ");
 $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -15,7 +15,7 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Menu principal</title>
+    <title>Dashboard ONG Transport</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* Styles de base pour les boutons */
@@ -73,27 +73,11 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         table th {
             background-color: #0E0D0DFF;
-            color: #fff;
             font-weight: 600;
         }
 
         table tr:hover {
             background-color: #f1f7ff;
-        }
-
-        .main-content {
-            padding: 20px;
-            margin-left: 250px; /* espace pour la sidebar */
-        }
-
-        header {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -104,7 +88,7 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- CONTENU PRINCIPAL -->
     <div class="main-content">
-        <header>Menu principal</header>
+        <header>Dashboard ONG Transport</header>
 
         <h2>Liste des élèves</h2>
 
@@ -139,7 +123,7 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="9">Aucun élève trouvé.</td></tr>
+                <tr><td colspan="8">Aucun élève trouvé.</td></tr>
             <?php endif; ?>
         </table>
     </div>
