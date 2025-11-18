@@ -1,10 +1,14 @@
 <?php
 require 'db/database.php';
 
-// Récupérer les élèves ayant une dette > 0
+// Récupérer les élèves ayant une dette
 $stmt = $pdo->query("
     SELECT e.*, 
-           a.montant, a.date_paiement, a.date_expiration, a.dette
+           a.id AS abo_id,
+           a.montant, 
+           a.date_paiement, 
+           a.date_expiration, 
+           a.dette
     FROM eleves e
     LEFT JOIN abonnements a ON e.id = a.eleve_id
     WHERE a.dette > 0
@@ -12,7 +16,6 @@ $stmt = $pdo->query("
 ");
 $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -39,12 +42,12 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
         tr:nth-child(even) { background-color: #f9f9f9; }
         .btn {
             padding: 5px 10px;
-            background: #007BFF;
+            background: #28a745;
             color: white;
             border-radius: 5px;
             text-decoration: none;
         }
-        .btn:hover { background: #0056b3; }
+        .btn:hover { background: #1e7e34; }
         .dette {
             color: red;
             font-weight: bold;
@@ -53,47 +56,47 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <!-- SIDEBAR -->
-    <?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php'; ?>
 
-    <!-- CONTENU PRINCIPAL -->
-    <div class="main-content">
-        <header>💰 Élèves ayant une dette</header>
+<div class="main-content">
+    <header>💰 Élèves ayant une dette</header>
 
-        <h2>Liste des élèves en dette</h2>
+    <h2>Liste des élèves en dette</h2>
 
-        <table>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Classe</th>
+            <th>Montant payé</th>
+            <th class="dette">Dette ($)</th>
+            <th>Date paiement</th>
+            <th>Expiration</th>
+            <th>Action</th>
+        </tr>
+
+        <?php if (!empty($eleves)): ?>
+            <?php foreach ($eleves as $e): ?>
             <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Classe</th>
-                <th>Montant payé</th>
-                <th class="dette">Dette ($)</th>
-                <th>Date paiement</th>
-                <th>Expiration</th>
-                <th>Actions</th>
+                <td><?= htmlspecialchars($e['nom']) ?></td>
+                <td><?= htmlspecialchars($e['prenom']) ?></td>
+                <td><?= htmlspecialchars($e['classe']) ?></td>
+                <td><?= $e['montant'] ?? 0 ?></td>
+                <td class="dette"><?= $e['dette'] ?></td>
+                <td><?= $e['date_paiement'] ?? '-' ?></td>
+                <td><?= $e['date_expiration'] ?? '-' ?></td>
+                <td>
+                    <a class="btn" href="regler_dette.php?abo_id=<?= $e['abo_id'] ?>&eleve_id=<?= $e['id'] ?>">
+                        Régler la dette
+                    </a>
+                </td>
             </tr>
-
-            <?php if (!empty($eleves)): ?>
-                <?php foreach ($eleves as $e): ?>
-                <tr>
-                    <td><?= htmlspecialchars($e['nom']) ?></td>
-                    <td><?= htmlspecialchars($e['prenom']) ?></td>
-                    <td><?= htmlspecialchars($e['classe']) ?></td>
-                    <td><?= $e['montant'] ?? 0 ?></td>
-                    <td class="dette"><?= $e['dette'] ?? 0 ?></td>
-                    <td><?= $e['date_paiement'] ?? '-' ?></td>
-                    <td><?= $e['date_expiration'] ?? '-' ?></td>
-                    <td>
-                        <a class="btn" href="gerer_abonnement.php?eleve_id=<?= $e['id'] ?>">Mettre à jour</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="8">✅ Aucun élève n’a de dette pour le moment.</td></tr>
-            <?php endif; ?>
-        </table>
-    </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr><td colspan="8">✅ Aucun élève n’a de dette.</td></tr>
+        <?php endif; ?>
+    </table>
+</div>
 
 </body>
 </html>
