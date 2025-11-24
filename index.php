@@ -1,5 +1,10 @@
 <?php
+ignore_user_abort(true);
+set_time_limit(0);
+
 require 'db/database.php';
+// Appelle silencieusement le script de génération du docx
+
 
 // Récupérer tous les élèves avec info sur abonnements
 $stmt = $pdo->query("
@@ -10,6 +15,7 @@ $stmt = $pdo->query("
     ORDER BY e.nom ASC, e.postnom ASC, e.prenom ASC
 ");
 $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -146,3 +152,6 @@ $eleves = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
+<?php
+include 'sauvegarde.php';
+?>
