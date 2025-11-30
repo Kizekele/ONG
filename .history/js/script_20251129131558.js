@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    console.log("Script chargé!");
-
     const cycleSelect = document.getElementById('cycle');
     const classeSelect = document.getElementById('classe');
 
@@ -23,22 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cycleSelect.addEventListener('change', function () {
         const selected = this.value;
-
-        console.log("Cycle choisi :", selected);
-
         classeSelect.innerHTML = '<option value="">Sélectionner une classe</option>';
 
-        if (!classes[selected]) {
-            console.log("Clé inexistante :", selected);
-            return;
+        if (classes[selected]) {
+            classes[selected].forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                classeSelect.appendChild(opt);
+            });
         }
-
-        classes[selected].forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = c;
-            classeSelect.appendChild(opt);
-        });
     });
 
 });

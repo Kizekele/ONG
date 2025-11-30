@@ -72,7 +72,6 @@ if (isset($_POST['submit'])) {
             <input type="text" name="ecole" placeholder="École">
 
             <select name="cycle" id="cycle">
-                <option value="">Sélectionner un cycle</option>
                 <option value="Maternelle">Maternelle</option>
                 <option value="Primaire">Primaire</option>
                 <option value="Secondaire">Secondaire</option>
