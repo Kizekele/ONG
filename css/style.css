@@ -23,11 +23,14 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100%;
+    height: 100vh;
+    max-height: 100vh; /* ensure sidebar never exceeds viewport */
     padding: 20px 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start; /* align children to the left for better layout */
+    overflow-y: scroll; /* enable vertical scrolling with always visible scrollbar */
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
     box-shadow: 2px 0 12px rgba(0,0,0,0.3);
     transition: width 0.4s ease-in-out, background-color 0.3s;
 }

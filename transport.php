@@ -1,6 +1,8 @@
 <?php
 require 'db/database.php';
 
+session_start();
+
 // Récupérer tous les bus
 $stmt = $pdo->query("SELECT * FROM bus ORDER BY id DESC");
 $bus = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -72,6 +74,17 @@ $bus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <h2>Informations sur les bus enregistrés</h2>
 
+        <?php if (isset($_SESSION['success'])): ?>
+            <p style="color: green;"><?= $_SESSION['success'] ?></p>
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['error'])): ?>
+            <p style="color: red;"><?= $_SESSION['error'] ?></p>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+
+        <a href="ajouter_bus.php" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-bottom: 20px; display: inline-block;">Ajouter un Bus</a>
+
         <?php if (!empty($bus)): ?>
         <table>
             <tr>
@@ -81,6 +94,7 @@ $bus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Postnom</th>
                 <th>Prénom</th>
                 <th>Téléphone</th>
+                <th>Actions</th>
             </tr>
 
             <?php foreach ($bus as $b): ?>
@@ -91,6 +105,10 @@ $bus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($b['conducteur_postnom']) ?></td>
                 <td><?= htmlspecialchars($b['conducteur_prenom']) ?></td>
                 <td><?= htmlspecialchars($b['conducteur_tel']) ?></td>
+                <td>
+                    <a href="modifier_bus.php?id=<?= $b['id'] ?>" style="background: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; margin-right: 5px;">Modifier</a>
+                    <a href="supprimer_bus.php?id=<?= $b['id'] ?>" style="background: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;" onclick="return confirm('Supprimer ce bus ?')">Supprimer</a>
+                </td>
             </tr>
             <?php endforeach; ?>
         </table>

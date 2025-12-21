@@ -70,6 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ");
             $insert->execute([$eleve_id, $reste, $date_paiement, $expiration]);
         }
+
+        // Re-fetch the updated data
+        $stmt = $pdo->prepare("
+            SELECT e.*, a.*
+            FROM abonnements a
+            JOIN eleves e ON e.id = a.eleve_id
+            WHERE a.id = ?
+        ");
+        $stmt->execute([$abo_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $dette = $data['dette'];
     }
 }
 ?>
